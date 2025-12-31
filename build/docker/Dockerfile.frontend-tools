@@ -1,0 +1,10 @@
+FROM node:20-alpine
+
+WORKDIR /work
+
+# Linters + minifiers (snel & standaard)
+RUN npm i -g \
+  eslint \
+  stylelint stylelint-config-standard \
+  terser \
+  csso-cli

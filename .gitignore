@@ -1,0 +1,9 @@
+/.idea
+
+# build output
+/html/*
+
+
+# OS / tooling rommel
+.DS_Store
+Thumbs.db

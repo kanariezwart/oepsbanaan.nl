@@ -1,0 +1,21 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#banana {
+    max-height: 90%;
+}
+
+@media (width <= 600px) {
+    #banana {
+        max-width: 90%;
+    }
+}
