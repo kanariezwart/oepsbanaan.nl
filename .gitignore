@@ -1,8 +1,15 @@
 /.idea
+/.stamps/
 
 # build output
 /html/*
-
+# test build output
+/build/tests/node_modules
+/build/tests/package-lock.json
+/build/tests/artifacts/
+/build/tests/test-results/
+/build/tests/playwright-report/
+/test-results/*
 
 # OS / tooling rommel
 .DS_Store
