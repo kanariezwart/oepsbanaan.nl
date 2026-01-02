@@ -1,0 +1,7 @@
+# Playwright image met browsers inbegrepen
+FROM mcr.microsoft.com/playwright:v1.48.2-jammy
+
+WORKDIR /work
+
+# (optioneel) sneller/cleaner output
+ENV CI=1

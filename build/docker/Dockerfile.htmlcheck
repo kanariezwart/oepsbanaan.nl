@@ -1,0 +1,10 @@
+FROM eclipse-temurin:21-jre-jammy
+
+RUN apt-get update && apt-get install -y curl ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt
+RUN curl -L -o vnu.jar https://github.com/validator/validator/releases/latest/download/vnu.jar
+
+WORKDIR /work
+ENTRYPOINT ["java","-jar","/opt/vnu.jar","--skip-non-html","--errors-only"]
