@@ -56,6 +56,14 @@ docker run --rm \
     SERVER_PID=$!
     trap "kill $SERVER_PID >/dev/null 2>&1 || true" EXIT
 
+    for i in $(seq 1 50); do
+          if curl -fsS "http://127.0.0.1:'"$PORT"'/" >/dev/null 2>&1; then
+            break
+          fi
+          sleep 0.1
+        done
+      curl -fsS "http://127.0.0.1:'"$PORT"'/" >/dev/null
+
     # run tests (only pass --project if it is non-empty)
     if [ -n "${PROJECT}" ]; then
       npx --prefix build/tests playwright test --config build/tests/playwright.config.js --project "${PROJECT}"

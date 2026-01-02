@@ -22,17 +22,30 @@
         n = requested;
     }
 
+    // update video source
     srcWebm.src = '/img/webm/' + n + '.webm';
     srcMp4.src = '/img/mp4/' + n + '.mp4';
-    gif.src = '/img/' + n + '.gif';
 
-    // try to load video
-    video.style.display = "";
-    video.load();
-
-    video.addEventListener("error", () => {
+    function showGif() {
+        gif.src = '/img/' + n + '.gif';
         video.style.display = "none";
         gif.style.display = "";
-    }, {once: true});
+    }
+
+    // Make autoplay more likely to succeed (esp. Safari/iOS)
+    video.addEventListener("error", showGif, { once: true });
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.autoplay = true;
+
+    // try to load video
+    video.load();
+    // Some browsers (Safari esp.) won't emit "error" when autoplay is blocked.
+    // Try to play and fallback if it is rejected.
+    const p = video.play();
+    if (p && typeof p.catch === "function") {
+        p.catch(showGif);
+    }
 
 })();

@@ -163,8 +163,76 @@
             debugLog(`src: webm=${webmSrc} mp4=${mp4Src} gif=${gifSrc}`);
 
             expect(videoVisible || gifVisible).toBeTruthy();
+
+            // If video is visible, verify it actually starts playing.
+            // Autoplay can be blocked without triggering a "video error" event.
+            if (videoVisible) {
+                await test.step("If video is shown, verify it is playing", async () => {
+                    await page.waitForTimeout(400);
+
+                    // In some browsers currentTime stays 0 until playback starts.
+                    const isPlaying = await page.evaluate(() => {
+                        const v = document.getElementById("banana-video");
+                        if (!v) return false;
+                        // "paused" is the key signal; currentTime advancing is an extra indicator.
+                        return !v.paused || v.currentTime > 0;
+                    });
+
+                    testInfo.annotations.push({
+                        type: "media",
+                        description: `videoPlaying=${isPlaying}`,
+                    });
+
+                    expect(isPlaying).toBeTruthy();
+                });
+            }
+
         });
     });
+
+    test("falls back to gif when autoplay is blocked", async ({page, baseURL}, testInfo) => {
+        const url = `${baseURL}/index.html`;
+
+        testInfo.annotations.push({type: "info", description: `Navigate: ${url}`});
+
+        // Simulate an autoplay policy failure (Safari-like): play() rejects.
+        await page.addInitScript(() => {
+            const originalPlay = HTMLMediaElement.prototype.play;
+            HTMLMediaElement.prototype.play = function () {
+                // Keep original behavior available, but force a NotAllowedError-like rejection.
+                try {
+                    originalPlay.apply(this, arguments);
+                } catch (_) {
+                }
+                return Promise.reject(new DOMException("Autoplay blocked", "NotAllowedError"));
+            };
+        });
+
+        await test.step("Open index.html (autoplay blocked via init script)", async () => {
+            await page.goto(url, {waitUntil: "domcontentloaded"});
+        });
+
+        await test.step("Wait for JS to attempt play() and fall back", async () => {
+            await page.waitForTimeout(800);
+        });
+
+        const video = page.locator("#banana-video");
+        const gif = page.locator("#banana-gif");
+
+        await test.step("Verify GIF fallback is shown", async () => {
+            const videoVisible = await video.isVisible().catch(() => false);
+            const gifVisible = await gif.isVisible().catch(() => false);
+
+            testInfo.annotations.push({
+                type: "state",
+                description: `videoVisible=${videoVisible}, gifVisible=${gifVisible}`,
+            });
+
+            expect(gifVisible).toBeTruthy();
+            expect(videoVisible).toBeFalsy();
+        });
+    });
+
 
     /**
      * Smoke test:
@@ -202,4 +270,6 @@
             expect(joined).toContain(`/${n}.`);
         });
     });
+
+
 })();
