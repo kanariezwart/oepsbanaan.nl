@@ -1,21 +1,73 @@
-html, body {
+/* main.css
+   Goals:
+   - Always center the animation perfectly within the visible viewport.
+   - Never upscale small animations (keep intrinsic size if it fits).
+   - If too large, downscale to fit within 90% of the viewport.
+   - Handle mobile browser UI (address bar) robustly using svh/svw when supported.
+*/
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
     height: 100%;
+}
+
+body {
     margin: 0;
+    background: #fff;
+    overflow: hidden; /* prevent scrollbars due to rounding */
 }
 
-.center-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+/* Full-screen centering stage */
+.viewport-center {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+
+    /* Safe-area padding for notched devices + a little margin */
+    padding: max(3vh, env(safe-area-inset-top)) max(3vw, env(safe-area-inset-right)) max(3vh, env(safe-area-inset-bottom)) max(3vw, env(safe-area-inset-left));
 }
 
-#banana {
-    max-height: 90%;
+/* Media sizing:
+   - width/height auto => keep intrinsic (original) size
+   - max-* => downscale only if it would overflow the allowed box
+   - object-fit: contain is a safe guard for replaced elements
+*/
+#banana-video,
+#banana-gif {
+    display: block;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
 }
 
-@media (width <= 600px) {
-    #banana {
-        max-width: 90%;
+/* Prefer the "small viewport" units on mobile to avoid address-bar jump */
+@supports (max-height: 1svh) {
+    #banana-video,
+    #banana-gif {
+        max-width: 90svw;
+        max-height: 90svh;
+    }
+
+    .viewport-center {
+        padding: max(3svh, env(safe-area-inset-top)) max(3svw, env(safe-area-inset-right)) max(3svh, env(safe-area-inset-bottom)) max(3svw, env(safe-area-inset-left));
+    }
+}
+
+/* Optional: respect reduced motion (does not disable video by itself; that is JS policy) */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
     }
 }
