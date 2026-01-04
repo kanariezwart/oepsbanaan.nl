@@ -1,4 +1,4 @@
-const { devices } = require("@playwright/test");
+const {devices} = require("@playwright/test");
 
 module.exports = {
     testDir: ".",
@@ -6,7 +6,7 @@ module.exports = {
     expect: { timeout: 5_000 },
     reporter: "line",
 
-    // Belangrijk: baseURL komt uit env, met fallback
+    // baseURL comes from env, with fallback
     use: {
         baseURL: process.env.BASE_URL || "http://127.0.0.1:8080",
         trace: "retain-on-failure",
@@ -19,7 +19,12 @@ module.exports = {
         { name: "firefox",  use: { ...devices["Desktop Firefox"] } },
         { name: "webkit",   use: { ...devices["Desktop Safari"] } },
 
-        // Mobiel (viewport + UA + touch)
+        // Mobile (viewport + UA + touch) - portrait
+        { name: "pixel-5", use: { ...devices["Pixel 5"] } },
         { name: "iphone-13", use: { ...devices["iPhone 13"] } },
+
+        // Mobile - landscape
+        // Keep UA/touch/mobile settings from the device, but swap the viewport.
+        { name: "iphone-13-landscape", use: { ...devices["iPhone 13"], viewport: {width: 844, height: 390}, },},
     ],
 };

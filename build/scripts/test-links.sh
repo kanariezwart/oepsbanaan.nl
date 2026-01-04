@@ -6,7 +6,7 @@ INDEX="$OUT/index.html"
 
 [[ -f "$INDEX" ]] || { echo "Missing $INDEX"; exit 1; }
 
-# Extract src/href waarden (simpel, maar effectief voor jouw use-case)
+# Extract src/href values
 refs=$(
   grep -Eo '(href|src)=["'\''][^"'\'']+["'\'']' "$INDEX" \
   | sed -E 's/^(href|src)=["'\'']([^"'\'']+)["'\'']$/\2/' \
