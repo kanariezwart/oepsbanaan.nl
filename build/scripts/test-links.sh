@@ -1,36 +1,68 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-OUT="html"
-INDEX="$OUT/index.html"
+ROOT_DIR="html"
 
-[[ -f "$INDEX" ]] || { echo "Missing $INDEX"; exit 1; }
+if [[ ! -d "$ROOT_DIR" ]]; then
+  echo "MISSING: $ROOT_DIR (run build first)"
+  exit 1
+fi
 
-# Extract src/href values
-refs=$(
-  grep -Eo '(href|src)=["'\''][^"'\'']+["'\'']' "$INDEX" \
-  | sed -E 's/^(href|src)=["'\'']([^"'\'']+)["'\'']$/\2/' \
-  | sed 's/\?.*$//' \
-  | grep -vE '^(https?:)?//|^mailto:|^tel:|^#' \
-  || true
-)
+# Schemes that are not "files in the webroot"
+# - data: inline resources (e.g. data:image/gif;base64,...)
+# - http(s): external
+# - mailto/tel: external handlers
+# - javascript: pseudo URLs (ideally none, but skip to avoid false positives)
+SKIP_SCHEME_RE='^(data:|https?://|mailto:|tel:|javascript:)'
 
 missing=0
-while IFS= read -r r; do
-  [[ -z "$r" ]] && continue
-  # Absolute pad vanaf webroot
-  if [[ "$r" == /* ]]; then
-    p="$OUT$r"
-  else
-    # Relatief t.o.v. index file
-    base="$(dirname "$INDEX")"
-    p="$base/$r"
+
+# Extract href/src attributes from built HTML
+# Notes:
+# - We intentionally keep it simple: this is a fast sanity check, not a full HTML parser.
+# - It should not fail on valid inline/data URLs.
+while IFS= read -r ref; do
+  [[ -z "$ref" ]] && continue
+
+  # Strip quotes if present
+  ref="${ref%\"}"
+  ref="${ref#\"}"
+  ref="${ref%\'}"
+  ref="${ref#\'}"
+
+  # Skip anchors and skipped schemes
+  if [[ "$ref" == \#* ]]; then
+    continue
+  fi
+  if [[ "$ref" =~ $SKIP_SCHEME_RE ]]; then
+    continue
   fi
 
-  if [[ ! -e "$p" ]]; then
-    echo "MISSING: $r  ->  $p"
+  # Skip query/hash for filesystem checks
+  ref="${ref%%\#*}"
+  ref="${ref%%\?*}"
+
+  # Only check absolute site paths (/css/x.css) and relative paths (css/x.css)
+  # Treat "/foo" as "html/foo"
+  if [[ "$ref" == /* ]]; then
+    path="$ROOT_DIR$ref"
+  else
+    path="$ROOT_DIR/$ref"
+  fi
+
+  if [[ ! -e "$path" ]]; then
+    echo "MISSING: $ref  ->  $path"
     missing=1
   fi
-done <<< "$refs"
+done < <(
+  # Grep href= and src=; allow single/double quotes
+  # Output only the URL part
+  grep -RhoE '(href|src)=["'\''][^"'\'' ]+["'\'']' "$ROOT_DIR" \
+    | sed -E 's/^(href|src)=//'
+)
 
-[[ "$missing" -eq 0 ]] && echo "OK: link/src references exist."
+if [[ "$missing" -ne 0 ]]; then
+  exit 1
+fi
+
+echo "OK: link checks passed."
