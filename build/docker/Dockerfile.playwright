@@ -1,7 +1,6 @@
-# Playwright image met browsers inbegrepen
-FROM mcr.microsoft.com/playwright:v1.48.2-jammy
-
+ARG PW_VERSION=1.48.2
+ARG PW_DISTRO=noble
+FROM mcr.microsoft.com/playwright:v${PW_VERSION}-${PW_DISTRO}
 WORKDIR /work
 
-# (optioneel) sneller/cleaner output
 ENV CI=1

@@ -1,4 +1,5 @@
-FROM alpine:3.20
+ARG ALPINE_TAG=3.23
+FROM alpine:${ALPINE_TAG}
 
 RUN apk add --no-cache ffmpeg bash
 
