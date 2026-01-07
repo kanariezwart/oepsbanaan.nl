@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -eu
 
-# (re)build tool images indien nodig
 docker image inspect oepsbanaan-tools:node >/dev/null 2>&1 || \
   docker build -f build/docker/Dockerfile.frontend-tools -t oepsbanaan-tools:node .
 

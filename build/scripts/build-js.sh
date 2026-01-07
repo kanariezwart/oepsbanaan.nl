@@ -17,7 +17,7 @@ docker run --rm -v "$(pwd):/work" -w /work "$IMG" sh -lc "
       rel=\"\${f#'\"$SRC\"'/}\"
       out=\"'\"$DST\"'/\$rel\"
       mkdir -p \"\$(dirname \"\$out\")\"
-      terser \"\$f\" -c -m --output \"\$out\"
+      terser \"\$f\" -c -m --ecma 2019 --output \"\$out\"
     ' _ {}
 "
 

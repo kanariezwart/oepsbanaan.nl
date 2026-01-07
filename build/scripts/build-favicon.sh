@@ -43,15 +43,15 @@ docker run --rm -v "$(pwd):/work" -w /work "$IMG" bash -lc "
   mkdir -p \"\$OUT_DIR\"
 
   # PNG favicons
-  convert \"\$SRC\" -resize 16x16   \"\$OUT_DIR/favicon-16x16.png\"
-  convert \"\$SRC\" -resize 32x32   \"\$OUT_DIR/favicon-32x32.png\"
-  convert \"\$SRC\" -resize 192x192 \"\$OUT_DIR/android-chrome-192x192.png\"
-  convert \"\$SRC\" -resize 512x512 \"\$OUT_DIR/android-chrome-512x512.png\"
-  convert \"\$SRC\" -resize 180x180 \"\$OUT_DIR/apple-touch-icon.png\"
+  magick \"\$SRC\" -resize 16x16   \"\$OUT_DIR/favicon-16x16.png\"
+  magick \"\$SRC\" -resize 32x32   \"\$OUT_DIR/favicon-32x32.png\"
+  magick \"\$SRC\" -resize 192x192 \"\$OUT_DIR/android-chrome-192x192.png\"
+  magick \"\$SRC\" -resize 512x512 \"\$OUT_DIR/android-chrome-512x512.png\"
+  magick \"\$SRC\" -resize 180x180 \"\$OUT_DIR/apple-touch-icon.png\"
 
   # Multi-size favicon.ico (16, 32, 48)
   # (48 helpt op sommige platforms)
-  convert \"\$SRC\" -define icon:auto-resize=16,32,48 \"\$OUT_ICO\"
+  magick \"\$SRC\" -define icon:auto-resize=16,32,48 \"\$OUT_ICO\"
 
   echo \"Wrote: \$OUT_ICO\"
   echo \"Wrote: \$OUT_DIR/*\"
