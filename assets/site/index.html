@@ -12,6 +12,7 @@
     <link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
 </head>
 <body>
 <div class="viewport-center" id="banana-container" data-banana="29">
@@ -28,11 +29,11 @@
         Sorry, your browser doesn't support HTML5 video.
     </video>
     <!-- GIF fallback  -->
-    <img id="banana-gif" src="/img/1.gif" style="display:none;" alt="Oeps! Banaan">
+    <img id="banana-gif" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" style="display:none;" alt="Oeps! Banaan"
+         loading="lazy" decoding="async">
 </div>
 
 <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-P1DGSMGTXE" async></script>
-<script type="text/javascript" src="/js/main.js"></script>
+<script type="text/javascript" src="/js/main.js" defer></script>
 </body>
 </html>
-
