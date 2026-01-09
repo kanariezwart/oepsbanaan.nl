@@ -56,22 +56,52 @@ make test
 
 ### Run Playwright smoke tests
 ```
-make test-playwright
+make pw
 ```
 
 ### Verbose Playwright run
 ```
-make test-playwright-verbose
+make pw-verbose
+```
+
+### Run Playwright UI mode
+```
+make pw-ui
+```
+
+### Run Playwright in headed mode
+```
+make pw-headed
 ```
 
 ### Skip rebuilding
 ```
-NO_BUILD=1 make test-playwright
+NO_BUILD=1 make pw
 ```
 
 ### Run a single browser
 ```
-PROJECT=webkit make test-playwright
+PROJECT=webkit make pw
+```
+
+---
+
+## Environment Variables
+
+- `NO_BUILD=1`: Skip rebuilding `html/` before running tests.
+- `PORT=8080`: Port for the local http-server inside the Playwright container.
+- `PROJECT=webkit`: Run a single Playwright project (e.g., `chromium`, `firefox`, `webkit`).
+- `PROJECT_SET=pr`: Use subset from `playwright.config.js` (`full`|`pr`).
+- `PW_DEBUG_LOGS=1`: Enable extra debug logging in Playwright tests.
+- `PW_ARGS`: Extra arguments passed to Playwright (e.g., `PW_ARGS="--grep @pr"`).
+
+---
+
+## Linting
+
+To run ESLint on the source JavaScript:
+```
+make lint
 ```
 
 ---
