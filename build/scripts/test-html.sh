@@ -14,6 +14,14 @@ docker run --rm \
   -v "$(pwd):/work" \
   -w /work \
   "$IMG" \
-  html/
+  sh -lc '
+    set -e
+
+    # Validate only HTML files
+    find html -type f \( -name "*.html" -o -name "*.htm" \) -print0 \
+      | xargs -0 -n1 htmlcheck
+  '
+
+echo "OK: HTML validation passed."
 
 echo "OK: HTML validation passed."

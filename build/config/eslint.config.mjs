@@ -1,9 +1,9 @@
 export default [
     {
-        files: ["assets/site/js/**/*.js"],
+        files: ["**/assets/site/js/**/*.js"],
         languageOptions: {
             ecmaVersion: "latest",
-            sourceType: "script",
+            sourceType: "module",
             globals: {
                 window: "readonly",
                 document: "readonly",

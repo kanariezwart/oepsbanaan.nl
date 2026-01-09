@@ -22,29 +22,39 @@ async function assertCenteredWithinBudgetAndNoUpscale(page, expect, opts = {}) {
     await waitForIntrinsicSize(page, which);
 
     const state = await page.evaluate((budget) => {
+        const container = document.getElementById("banana-container");
         const v = document.getElementById("banana-video");
         const g = document.getElementById("banana-gif");
+
         const vis = (el) => !!(el && el.offsetParent !== null);
-
         const which = vis(v) ? "video" : (vis(g) ? "gif" : "none");
-        const el = which === "video" ? v : (which === "gif" ? g : null);
-        if (!el) return {ok: false, reason: "no visible media"};
+        const media = which === "video" ? v : (which === "gif" ? g : null);
 
-        const r = el.getBoundingClientRect();
+        if (!container || !media) {
+            return { ok: false, reason: "missing container or media" };
+        }
+
+        const cr = container.getBoundingClientRect();
+        const mr = media.getBoundingClientRect();
+
         const vw = window.innerWidth;
         const vh = window.innerHeight;
 
-        const iw = which === "video" ? el.videoWidth : el.naturalWidth;
-        const ih = which === "video" ? el.videoHeight : el.naturalHeight;
+        const iw = which === "video" ? media.videoWidth : media.naturalWidth;
+        const ih = which === "video" ? media.videoHeight : media.naturalHeight;
 
         return {
             which,
-            vw,
+            vw, // viewport
             vh,
-            mw: r.width,
-            mh: r.height,
-            cx: r.left + r.width / 2,
-            cy: r.top + r.height / 2,
+            // container geometry (for centering)
+            cx: cr.left + cr.width / 2,
+            cy: cr.top + cr.height / 2,
+
+            // media geometry (for sizing)
+            mw: mr.width,
+            mh: mr.height,
+
             iw,
             ih,
             budget,
