@@ -66,6 +66,7 @@ Usage:
 Build targets:
   build                     Build the webroot into ./html (only if inputs changed).
   clean                     Remove build output and stamps (forces rebuild next time).
+  lint                      Run ESLint on source JavaScript.
 
 Test targets:
   test                      Run fast tests (sanity, links, HTML validation).
@@ -95,7 +96,7 @@ export PRINT_HELP
 # -------------------------------------------------
 # Phony targets
 # -------------------------------------------------
-.PHONY: help build clean test sanity links htmlcheck \
+.PHONY: help build clean lint test sanity links htmlcheck \
         docker-images docker-images-if-missing \
         test-playwright pw pw-pr pw-verbose pw-headed pw-ui \
         print-%
@@ -123,6 +124,10 @@ $(BUILD_STAMP): $(BUILD_INPUTS) | $(STAMP_DIR)
 	@touch $@
 
 build: $(BUILD_STAMP)
+	
+lint: docker-images-if-missing
+	docker run --rm -v "$$(pwd):/work" -w /work $(TOOLS_IMG) \
+		eslint -c build/config/eslint.config.mjs 'assets/site/js/**/*.js'
 
 # -------------------------------------------------
 # Fast tests (require a valid build)
