@@ -29,11 +29,18 @@
         Sorry, your browser doesn't support HTML5 video.
     </video>
     <!-- GIF fallback  -->
-    <img id="banana-gif" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" style="display:none;" alt="Oeps! Banaan"
-         loading="lazy" decoding="async">
+    <img id="banana-gif" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" style="display:none;" alt="Oeps! Banaan" loading="lazy" decoding="async">
+    <dialog id="modal" aria-labelledby="modal-title">
+        <h1 id="modal-title">A banana? Why?</h1>
+        <p>You left your device unattended. Someone gave you banana as a heads up!</p>
+        <form method="dialog">
+            <button id="closeModal" value="close">close</button>
+        </form>
+    </dialog>
+    <button id="openModal" type="button" title="Why is there an banana on my machine?">huh?</button>
 </div>
 
 <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-P1DGSMGTXE" async></script>
-<script type="text/javascript" src="/js/main.js" defer></script>
+<script type="module" src="/js/main.js"></script>
 </body>
 </html>
