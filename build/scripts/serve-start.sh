@@ -14,7 +14,7 @@ fi
 docker rm -f "$NAME" >/dev/null 2>&1 || true
 
 # Start detached
-docker run -d --rm --init \
+docker run -d --init \
   --name "$NAME" \
   -p "${PORT}:8080" \
   -v "$(pwd):/work" \
