@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Oeps! Banaan</title>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Oeps! Banaan</title>
     <meta name="description" content="Oeps! Banaan.">
     <meta name="keywords" content="banaan, banana, oeps banaan, oops banana">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,30 +15,36 @@
 </head>
 <body>
 <div class="viewport-center" id="banana-container" data-banana="29">
-    <video
-            id="banana-video"
-            autoplay
-            muted
-            loop
-            preload="metadata"
-            playsinline>
-
-        <source id="banana-webm" src="/img/webm/1.webm" type='video/webm; codecs="vp9"'>
-        <source id="banana-mp4" src="/img/mp4/1.mp4" type='video/mp4; codecs="avc1.42E0101"'>
-        Sorry, your browser doesn't support HTML5 video.
-    </video>
-    <!-- GIF fallback  -->
-    <img id="banana-gif" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" style="display:none;" alt="Oeps! Banaan" loading="lazy" decoding="async">
-    <dialog id="modal" aria-labelledby="modal-title">
+    <div class="media-box" aria-hidden="true">
+        <video
+                id="banana-video"
+                autoplay
+                muted
+                loop
+                preload="metadata"
+                playsinline>
+            <source id="banana-webm" src="/img/webm/1.webm" type='video/webm; codecs="vp9"'>
+            <source id="banana-mp4" src="/img/mp4/1.mp4" type='video/mp4; codecs="avc1.42E01E"'>
+            Sorry, your browser doesn't support HTML5 video.
+        </video>
+        <!-- GIF fallback -->
+        <img
+                id="banana-gif"
+                src="data:image/gif;base64,R0lGODlhAQABAAAAACw="
+                style="display:none;"
+                alt="Oeps! Banaan"
+                loading="lazy"
+                decoding="async">
+    </div>
+    <button id="open-modal" type="button" title="Why is there a banana on my machine?">huh? 🍌</button>
+    <dialog id="modal" aria-labelledby="modal-title" aria-modal="true">
         <h1 id="modal-title">A banana? Why?</h1>
-        <p>You left your device unattended. Someone gave you banana as a heads up!</p>
+        <p>You left your device unattended. Someone gave you a banana as a heads up! Stay careful!</p>
         <form method="dialog">
-            <button id="closeModal" value="close">close</button>
+            <button id="close-modal" value="close">close</button>
         </form>
     </dialog>
-    <button id="openModal" type="button" title="Why is there an banana on my machine?">huh?</button>
 </div>
-
 <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-P1DGSMGTXE" async></script>
 <script type="module" src="/js/main.js"></script>
 </body>

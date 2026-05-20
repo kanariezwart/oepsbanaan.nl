@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 export function initDialogModal({modalId, openId, closeId}) {
     const modal = document.getElementById(modalId),
         openBtn = document.getElementById(openId),
@@ -49,6 +48,12 @@ export function initDialogModal({modalId, openId, closeId}) {
         const el = lastActiveEl || openBtn;
         if (el && typeof el.focus === "function") {
             el.focus();
+        }
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.hasAttribute("open")) {
+            close();
         }
     });
 

@@ -14,6 +14,7 @@
 html,
 body {
     height: 100%;
+    font-family: sans-serif;
 }
 
 body {
@@ -35,40 +36,149 @@ body {
     padding: max(3vh, env(safe-area-inset-top)) max(3vw, env(safe-area-inset-right)) max(3vh, env(safe-area-inset-bottom)) max(3vw, env(safe-area-inset-left));
 }
 
+/* Layout inside the stage:
+   - media stage on top
+   - button below
+   This keeps the button stable regardless of media dimensions.
+*/
+#banana-container {
+    display: grid;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    gap: 1rem;
+}
+
+/* Reserved stage for the media:
+   - Fixed ratio so layout never jumps
+   - But: media itself is NOT forced to fill it (no upscaling)
+   - Dominant asset ratio in your set is 1:1
+*/
+.media-box {
+    width: min(90vw, 500px);
+    aspect-ratio: 1 / 1;
+    display: grid;
+    place-items: center;
+}
+
 /* Media sizing:
    - width/height auto => keep intrinsic (original) size
-   - max-* => downscale only if it would overflow the allowed box
-   - object-fit: contain is a safe guard for replaced elements
+   - max-* => downscale only if it would overflow the allowed stage
 */
-#banana-video,
-#banana-gif {
+.media-box > video,
+.media-box > img {
     display: block;
-    max-width: 90vw;
-    max-height: 90vh;
     width: auto;
     height: auto;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
 }
 
 /* Prefer the "small viewport" units on mobile to avoid address-bar jump */
 @supports (max-height: 1svh) {
-    #banana-video,
-    #banana-gif {
-        max-width: 90svw;
-        max-height: 90svh;
-    }
-
     .viewport-center {
         padding: max(3svh, env(safe-area-inset-top)) max(3svw, env(safe-area-inset-right)) max(3svh, env(safe-area-inset-bottom)) max(3svw, env(safe-area-inset-left));
     }
+
+    .media-box {
+        width: min(90svw, 500px);
+    }
 }
 
-/* Optional: respect reduced motion (does not disable video by itself; that is JS policy) */
 @media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.001ms !important;
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ---------- Buttons (cross-browser, accessible) ---------- */
+
+/* Shared button primitive (applies to open + close) */
+#open-modal,
+#close-modal {
+    /* Reset/normalize */
+    -webkit-appearance: none;
+    appearance: none;
+    border: 0;
+    margin: 0;
+    font: inherit;
+
+    /* Layout */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.95rem;
+    min-height: 44px; /* touch target */
+    white-space: nowrap;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+    /* Visual */
+    border-radius: 999px;
+    background: linear-gradient(
+            to bottom,
+            rgb(30 30 30 / 100%),
+            rgb(10 10 10 / 100%)
+    );
+    color: rgb(255 255 255 / 100%);
+
+    /* Depth (stable across browsers) */
+    box-shadow: 0 1px 0 rgb(255 255 255 / 10%) inset,
+    0 -1px 0 rgb(0 0 0 / 35%) inset,
+    0 1px 2px rgb(0 0 0 / 18%),
+    0 8px 20px rgb(0 0 0 / 12%);
+    cursor: pointer;
+    transition: transform 0.12s ease,
+    box-shadow 0.12s ease,
+    filter 0.12s ease;
+}
+
+#open-modal:hover,
+#close-modal:hover {
+    filter: brightness(1.05);
+}
+
+#open-modal:active,
+#close-modal:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 8%) inset,
+    0 -1px 0 rgb(0 0 0 / 45%) inset,
+    0 1px 2px rgb(0 0 0 / 22%),
+    0 5px 12px rgb(0 0 0 / 14%);
+}
+
+#open-modal:focus-visible,
+#close-modal:focus-visible {
+    outline: 3px solid rgb(0 0 0 / 100%);
+    outline-offset: 3px;
+}
+
+/* Disabled */
+#open-modal:disabled,
+#close-modal:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    filter: none;
+    box-shadow: 0 1px 0 rgb(255 255 255 / 8%) inset,
+    0 -1px 0 rgb(0 0 0 / 25%) inset;
+}
+
+/* Forced colors (Windows High Contrast) */
+@media (forced-colors: active) {
+    #open-modal,
+    #close-modal {
+        forced-color-adjust: auto;
+        background: ButtonFace;
+        color: ButtonText;
+        border: 1px solid ButtonText;
+        box-shadow: none;
     }
 }
 
@@ -80,9 +190,8 @@ dialog {
     padding: 1.5rem 1.75rem;
     max-width: min(90vw, 420px);
     width: 100%;
-    box-shadow:
-            0 10px 30px rgb(0 0 0 / 25%),
-            0 2px 8px rgb(0 0 0 / 15%);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 25%),
+    0 2px 8px rgb(0 0 0 / 15%);
 }
 
 dialog::backdrop {
@@ -105,25 +214,4 @@ dialog p {
 dialog form {
     display: flex;
     justify-content: flex-end;
-}
-
-dialog button {
-    appearance: none;
-    border: none;
-    border-radius: 8px;
-    padding: 0.5rem 0.9rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    background: #111;
-    color: #fff;
-}
-
-dialog button:hover {
-    background: #000;
-}
-
-dialog button:focus-visible {
-    outline: 2px solid #666;
-    outline-offset: 2px;
 }

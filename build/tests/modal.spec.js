@@ -4,8 +4,8 @@ const {test, expect} = require("@playwright/test");
  * Modal tests for HTML <dialog>.
  *
  * Requirements assumed:
- * - button#openModal opens dialog#modal
- * - button#closeModal closes it (either via JS or form[method="dialog"])
+ * - button#open-modal opens dialog#modal
+ * - button#close-modal closes it (either via JS or form[method="dialog"])
  * - clicking backdrop closes (your JS implements this)
  * - focus returns to the opener after close (your JS implements this)
  */
@@ -23,8 +23,8 @@ async function expectDialogOpen(page, open = true) {
 test("modal opens and closes via close button @pr", async ({page}) => {
     await page.goto("/index.html");
 
-    const openBtn = page.locator("#openModal");
-    const closeBtn = page.locator("#closeModal");
+    const openBtn = page.locator("#open-modal");
+    const closeBtn = page.locator("#close-modal");
     const modal = page.locator("#modal");
 
     await expect(openBtn).toBeVisible();
@@ -45,7 +45,7 @@ test("modal opens and closes via close button @pr", async ({page}) => {
 test("modal closes on Escape @pr", async ({page, browserName}) => {
     await page.goto("/index.html");
 
-    const openBtn = page.locator("#openModal");
+    const openBtn = page.locator("#open-modal");
     const modal = page.locator("#modal");
 
     await openBtn.click();
@@ -63,7 +63,7 @@ test("modal closes on Escape @pr", async ({page, browserName}) => {
 test("modal closes when clicking the backdrop (dialog surface) @full", async ({page}) => {
     await page.goto("/index.html");
 
-    const openBtn = page.locator("#openModal");
+    const openBtn = page.locator("#open-modal");
     const modal = page.locator("#modal");
 
     await openBtn.click();
@@ -83,7 +83,7 @@ test("modal closes when clicking the backdrop (dialog surface) @full", async ({p
     await expect(openBtn).toBeFocused();
 });
 
-test("modal does not open when open button is missing (smoke) @full", async ({ page }) => {
+test("modal does not open when open button is missing (smoke) @full", async ({page}) => {
     // This is a guard-style test: it ensures the page doesn't throw errors
     // if elements are absent. If your page always has the button, keep or drop.
     await page.goto("/index.html");
