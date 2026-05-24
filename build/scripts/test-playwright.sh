@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Run Playwright tests inside Docker.
+# Starts an http-server against html/, waits for it to be ready, then runs the suite.
+# node_modules are cached in a Docker volume so npm ci only runs on first use.
 set -euo pipefail
 
 PW_IMG="oepsbanaan-playwright:1.48.2"

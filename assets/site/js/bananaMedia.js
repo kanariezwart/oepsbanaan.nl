@@ -20,7 +20,6 @@
  * @returns {number}
  */
 export function selectBananaIndex(imageMax, requestedParam) {
-    "use strict";
     const max = Number(imageMax) || 1;
     const requested = Number(requestedParam);
 
@@ -37,7 +36,6 @@ export function selectBananaIndex(imageMax, requestedParam) {
  * @param {number} index
  */
 export function buildBananaSources(index) {
-    "use strict";
     return {
         webm: `/img/webm/${index}.webm`,
         mp4: `/img/mp4/${index}.mp4`,
@@ -65,9 +63,7 @@ export function initBananaMedia({
     }
 
     const imageMax = parseInt(container.dataset.banana, 10) || 1;
-
-    const index = selectBananaIndex(
-        imageMax,
+    const index = selectBananaIndex(imageMax,
         searchParams.get("banana")
     );
 
@@ -101,7 +97,6 @@ export function initBananaMedia({
     return {
         index,
         sources,
-        showGifFallback,
         video,
         gif,
     };

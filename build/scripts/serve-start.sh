@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
+# Start a detached background server for html/ in a named Docker container.
+# Use serve-stop.sh / serve-status.sh to manage the running container.
 set -euo pipefail
 
 PORT="${PORT:-8080}"
 NAME="${NAME:-oepsbanaan-serve}"
 IMG="${IMG:-oepsbanaan-tools:node}"
 
-# Build als html/ ontbreekt
+# Build html/ if it does not exist yet.
 if [[ ! -d html ]]; then
   ./build/scripts/build-html.sh >/dev/null
 fi
 
-# Stop/cleanup bestaande container met dezelfde naam (idempotent)
+# Remove any existing container with the same name so re-runs are idempotent.
 docker rm -f "$NAME" >/dev/null 2>&1 || true
 
 # Start detached

@@ -1,6 +1,6 @@
 "use strict";
 
-const {devices} = require("@playwright/test");
+const {devices, defineConfig} = require("@playwright/test");
 
 const isCI = !!process.env.CI;
 
@@ -30,7 +30,7 @@ const PROJECTS_PR = [
 
 const projects = PROJECT_SET === "pr" ? PROJECTS_PR : PROJECTS_FULL;
 
-module.exports = {
+module.exports = defineConfig({
     testDir: ".",
     timeout: 30_000,
     expect: {timeout: 5_000},
@@ -54,4 +54,4 @@ module.exports = {
     },
 
     projects,
-};
+});

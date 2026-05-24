@@ -1,7 +1,7 @@
 export function initDialogModal({modalId, openId, closeId}) {
-    const modal = document.getElementById(modalId),
-        openBtn = document.getElementById(openId),
-        closeBtn = closeId ? document.getElementById(closeId) : null;
+    const modal = document.getElementById(modalId);
+    const openBtn = document.getElementById(openId);
+    const closeBtn = closeId ? document.getElementById(closeId) : null;
 
     if (!modal || !openBtn) {
         return null;
@@ -24,19 +24,16 @@ export function initDialogModal({modalId, openId, closeId}) {
 
     function close() {
         if (hasNativeDialog) {
-            if (modal.open) {
-                modal.close();
-            }
+            modal.close();
         } else {
             modal.removeAttribute("open");
             modal.setAttribute("hidden", "");
         }
+        lastActiveEl = null;
     }
 
     openBtn.addEventListener("click", open);
-    if (closeBtn) {
-        closeBtn.addEventListener("click", close);
-    }
+    closeBtn?.addEventListener("click", close);
 
     modal.addEventListener("click", (e) => {
         if (e.target === modal) {
@@ -45,14 +42,11 @@ export function initDialogModal({modalId, openId, closeId}) {
     });
 
     modal.addEventListener("close", () => {
-        const el = lastActiveEl || openBtn;
-        if (el && typeof el.focus === "function") {
-            el.focus();
-        }
+        (lastActiveEl || openBtn)?.focus();
     });
 
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.hasAttribute("open")) {
+    modal.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
             close();
         }
     });

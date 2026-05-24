@@ -1,5 +1,30 @@
 export default [
     {
+        files: ["**/build/tests/**/*.js"],
+        languageOptions: {
+            ecmaVersion: "latest",
+            sourceType: "commonjs",
+            globals: {
+                require: "readonly",
+                module: "writable",
+                exports: "writable",
+                __dirname: "readonly",
+                __filename: "readonly",
+                process: "readonly",
+                console: "readonly",
+                Buffer: "readonly",
+            },
+        },
+        rules: {
+            "no-undef": "error",
+            "no-unused-vars": "warn",
+            "no-var": "error",
+            "prefer-const": "error",
+            "eqeqeq": "error",
+            "curly": "error",
+        },
+    },
+    {
         files: ["**/assets/site/js/**/*.js"],
         languageOptions: {
             ecmaVersion: "latest",
@@ -21,6 +46,11 @@ export default [
             "no-undef": "error",
             "no-unused-vars": "warn",
             "no-debugger": "warn",
+            "eqeqeq": "error",
+            "no-var": "error",
+            "prefer-const": "error",
+            "no-console": "warn",
+            "curly": "error",
         },
     },
 ];

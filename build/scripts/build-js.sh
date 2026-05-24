@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Lint JS with ESLint, then minify each file with terser into html/js/.
 set -eu
 
 IMG="oepsbanaan-tools:node"

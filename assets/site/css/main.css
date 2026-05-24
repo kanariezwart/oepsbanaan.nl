@@ -54,7 +54,8 @@ body {
    - Dominant asset ratio in your set is 1:1
 */
 .media-box {
-    width: min(90vw, 500px);
+    width: min(90vw, 90vh, 500px);
+    height: min(90vw, 90vh, 500px);
     aspect-ratio: 1 / 1;
     display: grid;
     place-items: center;
@@ -81,7 +82,8 @@ body {
     }
 
     .media-box {
-        width: min(90svw, 500px);
+        width: min(90svw, 90svh, 500px);
+        height: min(90svw, 90svh, 500px);
     }
 }
 
@@ -123,10 +125,10 @@ body {
     border-radius: 999px;
     background: linear-gradient(
             to bottom,
-            rgb(30 30 30 / 100%),
-            rgb(10 10 10 / 100%)
+            rgb(30 30 30),
+            rgb(10 10 10)
     );
-    color: rgb(255 255 255 / 100%);
+    color: rgb(255 255 255);
 
     /* Depth (stable across browsers) */
     box-shadow: 0 1px 0 rgb(255 255 255 / 10%) inset,
@@ -155,7 +157,7 @@ body {
 
 #open-modal:focus-visible,
 #close-modal:focus-visible {
-    outline: 3px solid rgb(0 0 0 / 100%);
+    outline: 3px solid rgb(0 0 0);
     outline-offset: 3px;
 }
 

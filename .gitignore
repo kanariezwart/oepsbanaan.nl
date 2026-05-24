@@ -14,3 +14,4 @@
 # OS / tooling rommel
 .DS_Store
 Thumbs.db
+./.claude/*

@@ -35,9 +35,9 @@ async function waitForMediaDecision(page) {
 }
 
 /**
- *
- * @param page
- * @returns {Promise<XPathResult>}
+ * Returns which media element is currently visible.
+ * @param {import("@playwright/test").Page} page
+ * @returns {Promise<"video"|"gif"|"none">}
  */
 async function getVisibleMediaType(page) {
     return page.evaluate(() => {
@@ -51,9 +51,10 @@ async function getVisibleMediaType(page) {
 }
 
 /**
- *
- * @param page
- * @param which
+ * Waits until the visible media element has non-zero intrinsic dimensions.
+ * Needed before measuring layout to avoid reading 0×0 during decode.
+ * @param {import("@playwright/test").Page} page
+ * @param {"video"|"gif"} which
  * @returns {Promise<void>}
  */
 async function waitForIntrinsicSize(page, which) {
@@ -71,9 +72,10 @@ async function waitForIntrinsicSize(page, which) {
 }
 
 /**
- * 
- * @param page
- * @returns {Promise<XPathResult>}
+ * Snapshots the current visibility and src attributes of all media elements.
+ * Useful for annotating test failures with the exact media state at that moment.
+ * @param {import("@playwright/test").Page} page
+ * @returns {Promise<{videoVisible: boolean, gifVisible: boolean, webmSrcAttr: string|null, mp4SrcAttr: string|null, gifSrcAttr: string|null, gifSrcResolved: string|null}>}
  */
 async function getMediaState(page) {
     return page.evaluate(() => {

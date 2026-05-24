@@ -7,9 +7,8 @@ OUT_IMG="html/img"        # output: html/img/{n}.gif
 OUT_WEBM="$OUT_IMG/webm"  # output: html/img/webm/{n}.webm
 OUT_MP4="$OUT_IMG/mp4"    # output: html/img/mp4/{n}.mp4
 
-# Docker images
-GIF_IMG="oepsbanaan-gifsicle:alpine"
-VID_IMG="oepsbanaan-ffmpeg:alpine"
+# Docker image
+MEDIA_IMG="${MEDIA_IMG:-oepsbanaan-media:alpine}"
 
 # Tuning knobs
 JOBS="${JOBS:-4}"
@@ -22,11 +21,8 @@ X264_PRESET="${X264_PRESET:-slow}"
 mkdir -p "$OUT_IMG" "$OUT_WEBM" "$OUT_MP4"
 
 # Ensure docker images exist (build them if missing)
-docker image inspect "$GIF_IMG" >/dev/null 2>&1 || \
-  docker build -f build/docker/Dockerfile.gifsicle -t "$GIF_IMG" .
-
-docker image inspect "$VID_IMG" >/dev/null 2>&1 || \
-  docker build -f build/docker/Dockerfile.ffmpeg -t "$VID_IMG" .
+docker image inspect "$MEDIA_IMG" >/dev/null 2>&1 || \
+  docker build -f build/docker/Dockerfile.media-tools -t "$MEDIA_IMG" .
 
 # Collect numeric GIF inputs
 #mapfile -t GIFS < <(find "$SRC_DIR" -maxdepth 1 -type f -name '*.gif' -printf '%f\n' \
@@ -44,8 +40,7 @@ for f in "$SRC_DIR"/*.gif; do
 done
 
 # sort numerically
-IFS=$'\n' GIFS=($(sort -n <<<"${GIFS[*]}"))
-unset IFS
+mapfile -t GIFS < <(printf '%s\n' "${GIFS[@]}" | sort -n)
 
 if [[ "${#GIFS[@]}" -eq 0 ]]; then
   echo "No numeric GIFs found in $SRC_DIR (expected: 1.gif, 2.gif, ...)."
@@ -53,7 +48,7 @@ if [[ "${#GIFS[@]}" -eq 0 ]]; then
 fi
 
 echo "==> Optimize GIF fallback -> $OUT_IMG  (JOBS=$JOBS)"
-docker run --rm -v "$(pwd):/work" -w /work --entrypoint sh "$GIF_IMG" -lc "
+docker run --rm -v "$(pwd):/work" -w /work --entrypoint sh "$MEDIA_IMG" -lc "
   set -euo pipefail
   OUT='$OUT_IMG'
   SRC='$SRC_DIR'
@@ -75,7 +70,7 @@ docker run --rm -v "$(pwd):/work" -w /work --entrypoint sh "$GIF_IMG" -lc "
 "
 
 echo "==> Convert optimized GIFs -> WebM + MP4  (JOBS=$JOBS)"
-docker run --rm -v "$(pwd):/work" -w /work --entrypoint sh "$VID_IMG" -lc "
+docker run --rm -v "$(pwd):/work" -w /work --entrypoint sh "$MEDIA_IMG" -lc "
   set -eu
   IN='$OUT_IMG'
   OUTW='$OUT_WEBM'

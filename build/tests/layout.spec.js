@@ -1,11 +1,17 @@
 "use strict";
 
+/**
+ * PR layout tests — verify that media fits in the viewport and that the
+ * "huh?" button stays at a stable position regardless of which banana is shown.
+ */
+
 const {test, expect} = require("@playwright/test");
 const {waitForMediaDecision, getVisibleMediaType} = require("./helpers/media");
 const diag = require("./helpers/diagnostics").withExpect(expect);
 
 diag.attachFailureArtifacts(test);
 
+// Returns a plain {x, y, w, h, left, top, right, bottom} from getBoundingClientRect.
 async function getRect(page, selector) {
     return page.evaluate((sel) => {
         const el = document.querySelector(sel);

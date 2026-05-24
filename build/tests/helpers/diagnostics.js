@@ -11,11 +11,7 @@ function ensureArtifactsDir() {
     }
 }
 
-/**
- *
- * @param name
- * @returns {*}
- */
+// Converts a test title to a safe filename by replacing special characters.
 function safeName(name) {
     return name.replace(/[^a-z0-9-_]+/gi, "_").slice(0, 120);
 }

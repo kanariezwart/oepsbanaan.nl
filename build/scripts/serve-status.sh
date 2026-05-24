@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Print the status of the detached background server started by serve-start.sh.
+# Exits 0 if running, 1 if stopped or not found.
 set -euo pipefail
 
 NAME="${NAME:-oepsbanaan-serve}"

@@ -2,7 +2,7 @@
   "esversion": 11,
   "browser": true,
   "module": true,
-
+  "node": true,
   "undef": true,
   "unused": true,
   "debug": false,

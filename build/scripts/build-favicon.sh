@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-IMG="oepsbanaan-favicon:alpine"
+MEDIA_IMG="${MEDIA_IMG:-oepsbanaan-media:alpine}"
 
-# Bron (zet er 1 van neer)
 
 SRC_JPG="assets/favicons/source.jpg"
 SRC_SVG="assets/favicons/source.svg"
@@ -12,8 +11,8 @@ SRC_PNG="assets/favicons/source.png"
 OUT_DIR="html/favicons"
 OUT_ICO="html/favicon.ico"
 
-docker image inspect "$IMG" >/dev/null 2>&1 || \
-  docker build -f build/docker/Dockerfile.favicon -t "$IMG" .
+docker image inspect "$MEDIA_IMG" >/dev/null 2>&1 || \
+  docker build -f build/docker/Dockerfile.media-tools -t "$MEDIA_IMG" .
 
 mkdir -p "$OUT_DIR"
 mkdir -p "html"
@@ -33,7 +32,7 @@ else
 fi
 
 # Render/convert in container
-docker run --rm -v "$(pwd):/work" -w /work "$IMG" bash -lc "
+docker run --rm -v "$(pwd):/work" -w /work "$MEDIA_IMG" bash -lc "
   set -euo pipefail
 
   SRC='$SRC'
@@ -50,7 +49,6 @@ docker run --rm -v "$(pwd):/work" -w /work "$IMG" bash -lc "
   magick \"\$SRC\" -resize 180x180 \"\$OUT_DIR/apple-touch-icon.png\"
 
   # Multi-size favicon.ico (16, 32, 48)
-  # (48 helpt op sommige platforms)
   magick \"\$SRC\" -define icon:auto-resize=16,32,48 \"\$OUT_ICO\"
 
   echo \"Wrote: \$OUT_ICO\"

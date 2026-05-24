@@ -42,7 +42,7 @@ test("modal opens and closes via close button @pr", async ({page}) => {
     await expect(openBtn).toBeFocused();
 });
 
-test("modal closes on Escape @pr", async ({page, browserName}) => {
+test("modal closes on Escape @pr", async ({page}) => {
     await page.goto("/index.html");
 
     const openBtn = page.locator("#open-modal");

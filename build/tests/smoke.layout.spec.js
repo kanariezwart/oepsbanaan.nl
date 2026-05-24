@@ -1,5 +1,11 @@
 "use strict";
 
+/**
+ * Full-suite layout tests — verify centering, viewport budget, and rotation
+ * across all configured browser/device projects.
+ * Runs only in the @full project set (slower, not needed on every PR).
+ */
+
 const {test, expect} = require("@playwright/test");
 const {assertCenteredWithinBudgetAndNoUpscale, isMobileProject} = require("./helpers/layout");
 const diag = require("./helpers/diagnostics").withExpect(expect);

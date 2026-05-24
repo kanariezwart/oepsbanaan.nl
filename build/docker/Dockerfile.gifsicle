@@ -1,5 +1,0 @@
-# gifsicle for GIF optimization
-ARG ALPINE_TAG=3.23
-FROM alpine:${ALPINE_TAG}
-RUN apk add --no-cache gifsicle
-WORKDIR /work

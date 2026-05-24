@@ -1,11 +1,18 @@
 "use strict";
 
+/**
+ * Core smoke tests — verify that the page loads, media plays or falls back,
+ * query-param selection works, and no unnecessary network requests are made.
+ */
+
 const {test, expect} = require("@playwright/test");
 const {waitForMediaDecision, getVisibleMediaType, getMediaState} = require("./helpers/media");
 const diag = require("./helpers/diagnostics").withExpect(expect);
 
 diag.attachFailureArtifacts(test);
 
+// Collects all request URLs that match predicate, starting from the moment this
+// is called. Must be set up before page.goto() to catch early requests.
 function collectRequests(page, predicate) {
     const hits = [];
     page.on("request", (req) => {

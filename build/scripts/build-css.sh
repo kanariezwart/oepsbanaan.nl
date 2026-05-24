@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Lint CSS with stylelint, then minify each file with csso into html/css/.
 set -eu
 
 IMG="oepsbanaan-tools:node"
