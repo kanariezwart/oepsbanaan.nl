@@ -17,7 +17,7 @@ function collectRequests(page, predicate) {
     const hits = [];
     page.on("request", (req) => {
         const u = req.url();
-        if (predicate(u, req)) hits.push(u);
+        if (predicate(u, req)) {hits.push(u);}
     });
     return hits;
 }
@@ -44,7 +44,7 @@ test("@pr index loads and shows video or gif", async ({page, baseURL}, testInfo)
     if (state.videoVisible) {
         await page.waitForFunction(() => {
             const v = document.getElementById("banana-video");
-            if (!v) return false;
+            if (!v) {return false;}
             return !v.paused || v.currentTime > 0;
         }, {timeout: 5000});
 
@@ -78,7 +78,7 @@ test("@pr falls back to gif when autoplay is blocked", async ({page, baseURL}, t
     await page.waitForFunction(() => {
         const v = document.getElementById("banana-video");
         const g = document.getElementById("banana-gif");
-        if (!v || !g) return false;
+        if (!v || !g) {return false;}
 
         const vHidden = v.style.display === "none";
         const gShown = g.style.display !== "none";

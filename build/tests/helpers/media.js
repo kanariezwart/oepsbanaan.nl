@@ -17,7 +17,7 @@ async function waitForMediaDecision(page) {
         const videoVisible = vis(v);
         const gifVisible = vis(g);
 
-        if (!(videoVisible || gifVisible)) return false;
+        if (!(videoVisible || gifVisible)) {return false;}
 
         // Video path: both sources must be present
         const hasVideoSrc =
@@ -44,8 +44,8 @@ async function getVisibleMediaType(page) {
         const v = document.getElementById("banana-video");
         const g = document.getElementById("banana-gif");
         const vis = (el) => !!(el && el.offsetParent !== null);
-        if (vis(v)) return "video";
-        if (vis(g)) return "gif";
+        if (vis(v)) {return "video";}
+        if (vis(g)) {return "gif";}
         return "none";
     });
 }

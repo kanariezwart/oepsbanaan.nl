@@ -15,7 +15,7 @@ diag.attachFailureArtifacts(test);
 async function getRect(page, selector) {
     return page.evaluate((sel) => {
         const el = document.querySelector(sel);
-        if (!el) return null;
+        if (!el) {return null;}
         const r = el.getBoundingClientRect();
         return {x: r.x, y: r.y, w: r.width, h: r.height, left: r.left, top: r.top, right: r.right, bottom: r.bottom};
     }, selector);
@@ -43,7 +43,7 @@ test("@pr layout: banana fits in viewport (no overflow, media contained in media
 
     const boxSizes = await page.evaluate(() => {
         const el = document.querySelector(".media-box");
-        if (!el) return null;
+        if (!el) {return null;}
         const r = el.getBoundingClientRect();
         return {bw: r.width, bh: r.height, vw: window.innerWidth, vh: window.innerHeight};
     });
@@ -63,7 +63,7 @@ test("@pr layout: banana fits in viewport (no overflow, media contained in media
     const bounds = await page.evaluate((sel) => {
         const c = document.querySelector(".media-box");
         const m = document.querySelector(sel);
-        if (!c || !m) return {ok: false, reason: "missing elements"};
+        if (!c || !m) {return {ok: false, reason: "missing elements"};}
 
         const cr = c.getBoundingClientRect();
         const mr = m.getBoundingClientRect();

@@ -38,7 +38,7 @@ test("@full layout: stays centered after rotation (desktop viewport swap)", asyn
     await assertCenteredWithinBudgetAndNoUpscale(page, expect, {budget: 0.90});
 
     const size = page.viewportSize();
-    if (!size) return;
+    if (!size) {return;}
 
     diag.debugLog(testInfo, `rotate viewport ${size.width}x${size.height} -> ${size.height}x${size.width}`);
 

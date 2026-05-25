@@ -5,6 +5,7 @@ export default [
             ecmaVersion: "latest",
             sourceType: "commonjs",
             globals: {
+                // Node.js
                 require: "readonly",
                 module: "writable",
                 exports: "writable",
@@ -13,6 +14,11 @@ export default [
                 process: "readonly",
                 console: "readonly",
                 Buffer: "readonly",
+                // Browser globals used inside page.evaluate() callbacks
+                document: "readonly",
+                window: "readonly",
+                HTMLMediaElement: "readonly",
+                DOMException: "readonly",
             },
         },
         rules: {
@@ -22,6 +28,8 @@ export default [
             "prefer-const": "error",
             "eqeqeq": "error",
             "curly": "error",
+            "no-console": "warn",
+            "no-global-assign": "error",
         },
     },
     {

@@ -17,11 +17,11 @@ function safeName(name) {
 }
 
 /**
- * Optional debug logging (CLI).
+ * Optional debug logging (CLI)
  * Enable with: PW_DEBUG_LOGS=1
  */
 function debugLog(testInfo, msg) {
-    if (process.env.PW_DEBUG_LOGS !== "1") return;
+    if (process.env.PW_DEBUG_LOGS !== "1") {return;}
     const ts = new Date().toISOString();
     // eslint-disable-next-line no-console
     console.log(`[PW ${ts}] [${testInfo.project.name}] ${msg}`);
@@ -48,7 +48,7 @@ function installErrorGates(page) {
     const pageErrors = [];
 
     page.on("console", (msg) => {
-        if (msg.type() === "error") consoleErrors.push(msg.text());
+        if (msg.type() === "error") {consoleErrors.push(msg.text());}
     });
 
     page.on("pageerror", (err) => {
@@ -64,7 +64,7 @@ function installErrorGates(page) {
  */
 function attachFailureArtifacts(test) {
     test.afterEach(async ({page}, testInfo) => {
-        if (testInfo.status === testInfo.expectedStatus) return;
+        if (testInfo.status === testInfo.expectedStatus) {return;}
 
         ensureArtifactsDir();
 
@@ -99,7 +99,6 @@ function assertNoJsErrors(testInfo, consoleErrors, pageErrors) {
 
 // `expect` is only available from @playwright/test; inject it from specs if you want.
 function withExpect(_expect) {
-    // eslint-disable-next-line no-global-assign
     expect = _expect;
     return module.exports;
 }
