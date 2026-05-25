@@ -5,7 +5,6 @@
 /html/*
 # test build output
 /build/tests/node_modules
-/build/tests/package-lock.json
 /build/tests/artifacts/
 /build/tests/test-results/
 /build/tests/playwright-report/
