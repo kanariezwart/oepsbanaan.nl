@@ -103,7 +103,6 @@ body {
 #open-modal,
 #close-modal {
     /* Reset/normalize */
-    -webkit-appearance: none;
     appearance: none;
     border: 0;
     margin: 0;
