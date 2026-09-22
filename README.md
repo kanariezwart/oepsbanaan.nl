@@ -140,11 +140,12 @@ PROJECT=webkit make pw
 
 ## Deployment
 
-The output is a static webroot in `html/`.
+The site runs on Cloudflare Workers (static assets, `wrangler.jsonc`). CI deploys `html/` automatically on every push to `main` (`.github/workflows/ci.yml`, `deploy` job).
 
-Example:
+To deploy manually:
 ```
-rsync -av --delete html/ user@server:/var/www/oepsbanaan.nl/
+npm ci
+npx wrangler deploy
 ```
 
 ---

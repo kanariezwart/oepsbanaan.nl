@@ -3,6 +3,8 @@
 
 # build output
 /html/*
+/node_modules
+
 # test build output
 /build/tests/node_modules
 /build/tests/artifacts/

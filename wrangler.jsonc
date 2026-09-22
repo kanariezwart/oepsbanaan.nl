@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "oepsbanaan-site",
+  // Set this to today's date; review runtime changes before advancing it.
+  "compatibility_date": "2026-09-22",
+  "assets": {
+    "directory": "./html"
+  }
+}
