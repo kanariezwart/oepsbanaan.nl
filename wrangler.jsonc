@@ -5,5 +5,10 @@
   "compatibility_date": "2026-09-22",
   "assets": {
     "directory": "./html"
+  },
+  "observability": {
+    "enabled": true,
+    "logs": { "enabled": true, "head_sampling_rate": 1 },
+    "traces": { "enabled": true, "head_sampling_rate": 0.01 }
   }
 }
